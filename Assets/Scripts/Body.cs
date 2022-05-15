@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Body : MonoBehaviour
 {
@@ -30,18 +32,15 @@ public class Body : MonoBehaviour
 
     void Start()
     {
-
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.tag == "Pred")
         {
-
             danger = true;
             rbf = null;
         }
-
     }
 
     private void OnTriggerStay2D(Collider2D coll)
@@ -51,8 +50,9 @@ public class Body : MonoBehaviour
             coll.GetComponent<Predator>().find = true;
 
             rb.AddForce((rb.transform.position - coll.gameObject.transform.position).normalized * genV * k);
-            coll.GetComponent<Predator>().rb.AddForce((rb.transform.position - coll.gameObject.transform.position).normalized * coll.GetComponent<Predator>().genV * coll.GetComponent<Predator>().kv);
-
+            coll.GetComponent<Predator>().rb
+                .AddForce((rb.transform.position - coll.gameObject.transform.position).normalized *
+                          coll.GetComponent<Predator>().genV * coll.GetComponent<Predator>().kv);
         }
     }
 
@@ -64,7 +64,6 @@ public class Body : MonoBehaviour
             danger = false;
             Debug.Log("no danger");
         }
-
     }
 
     public void SpawnBody()
@@ -76,68 +75,58 @@ public class Body : MonoBehaviour
         this.transform.localScale = new Vector3(D(this.size), D(this.size), 1);
         obj.GetComponent<Body>().size = this.size;
         obj.GetComponent<Body>().transform.localScale = this.transform.localScale;
-        obj.GetComponent<Body>().transform.position += new Vector3(2 * this.transform.localScale.x, 2 * this.transform.localScale.x, 0);
+        obj.GetComponent<Body>().transform.position +=
+            new Vector3(2 * this.transform.localScale.x, 2 * this.transform.localScale.x, 0);
         obj.GetComponent<Body>().genV += Random.Range(-mutagen, mutagen);
         obj.GetComponent<Body>().lifetime = 0;
         obj.GetComponent<Body>().deadtime = 200000 / genV;
-        obj.GetComponent<SpriteRenderer>().color = new Color(0.5f, obj.GetComponent<Body>().genV * 0.0003f, obj.GetComponent<Body>().genV * 0.0003f, 1.0f);
+        obj.GetComponent<SpriteRenderer>().color = new Color(0.5f, obj.GetComponent<Body>().genV * 0.0003f,
+            obj.GetComponent<Body>().genV * 0.0003f, 1.0f);
         if (obj.GetComponent<Body>().genV <= 0)
             Destroy(obj);
-
     }
+
     public float D(float Size)
     {
-        return 2 * (float)System.Math.Sqrt(Size / System.Math.PI);
+        return 2 * (float) System.Math.Sqrt(Size / System.Math.PI);
     }
 
-
-
-    void Update()
+    private void Update()
     {
-
         if (lifetime > deadtime - 1)
             sr.color = new Color(0.8f, 0.2f, 0.2f, 0.5f);
         if (lifetime > deadtime)
             Destroy(this.gameObject);
-        else
-        {
-            if (size > devidesize)
-                /*if (Random.Range(0, 100) < 40)
-                {
-                    Sprite.
-                    Spawner predator = new Spawner();
-                    predator.SpawnPred();
-                }
-                else*/
-                    SpawnBody();
-            if (!danger)
+        lifetime += Time.deltaTime;
+    }
+
+    void FixedUpdate()
+    {
+        if (size > devidesize)
+            /*if (Random.Range(0, 100) < 40)
             {
-                if (rbf == null)
-                {
-                    population.food.Clear();
-                    population.food.AddRange(GameObject.FindGameObjectsWithTag("Food"));
-                    rbf = population.FindClosestEnemy(rb);
-
-
-
-                }
-                else
-                {
-                    //rb.mass = size;
-                    lifetime += Time.deltaTime;
-
-
-
-
-                    rb.AddForce((rbf.transform.position - rb.transform.position).normalized * genV * k);
-
-                }
+                Sprite.
+                Spawner predator = new Spawner();
+                predator.SpawnPred();
+            }
+            else*/
+            SpawnBody();
+        if (!danger)
+        {
+            if (rbf == null)
+            {
+                population.food.Clear();
+                population.food.AddRange(GameObject.FindGameObjectsWithTag("Food"));
+                rbf = population.FindClosestEnemy(rb);
             }
             else
             {
-                rbf = null;
+                rb.AddForce((rbf.transform.position - rb.transform.position).normalized * genV * k);
             }
-
+        }
+        else
+        {
+            rbf = null;
         }
     }
 }

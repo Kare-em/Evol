@@ -1,22 +1,34 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 public class PopulationControl : MonoBehaviour
 {
     //public List<GameObject> food = new List<GameObject>();
     ///public List<GameObject> body = new List<GameObject>();
     public ArrayList pred = new ArrayList();
+
     public ArrayList food = new ArrayList();
     public ArrayList body = new ArrayList();
     public Text text;
 
-    // Start is called before the first frame update
+    public static PopulationControl Control { get; private set; }
+
+    private void Awake()
+    {
+        Control = this;
+    }
+
     void Start()
     {
         text.text += "Hello";
         StartCoroutine(Stats());
     }
+
     public GameObject FindClosestEnemy(Rigidbody2D rb)
     {
         GameObject closest = null;
@@ -35,6 +47,7 @@ public class PopulationControl : MonoBehaviour
                 }
             }
         }
+
         return closest;
     }
 
@@ -57,14 +70,13 @@ public class PopulationControl : MonoBehaviour
             float min = 32000;
             foreach (GameObject item in body)
             {
-
                 if (item.GetComponent<Body>().genV > max)
                     max = item.GetComponent<Body>().genV;
-                else
-                    if (item.GetComponent<Body>().genV < min)
+                else if (item.GetComponent<Body>().genV < min)
                     min = item.GetComponent<Body>().genV;
                 avg += item.GetComponent<Body>().genV;
             }
+
             if (pred.Count != 0)
                 avg = avg / body.Count;
             else
@@ -81,12 +93,12 @@ public class PopulationControl : MonoBehaviour
                 {
                     if (item.GetComponent<Predator>().genV > max)
                         max = item.GetComponent<Predator>().genV;
-                    else
-                        if (item.GetComponent<Predator>().genV < min)
+                    else if (item.GetComponent<Predator>().genV < min)
                         min = item.GetComponent<Predator>().genV;
                     avg += item.GetComponent<Predator>().genV;
                 }
             }
+
             if (pred.Count != 0)
                 avg = avg / pred.Count;
             else
@@ -99,13 +111,12 @@ public class PopulationControl : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
-
-
     }
+
     // Update is called once per frame
     void Update()
     {
-        
-
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

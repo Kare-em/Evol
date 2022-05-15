@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1992857584387937453}
+  - component: {fileID: -8983296575597554706}
   - component: {fileID: 7354643610872620923}
   - component: {fileID: 7354643610872620917}
   - component: {fileID: 998389029557096727}
   - component: {fileID: 1644115427667628777}
   - component: {fileID: 4049963522301479999}
-  - component: {fileID: -8983296575597554706}
   - component: {fileID: 6348728017017233319}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Predator
   m_TagString: Pred
   m_Icon: {fileID: 0}
@@ -42,6 +42,30 @@ RectTransform:
   m_AnchoredPosition: {x: 102.438, y: -0.149}
   m_SizeDelta: {x: 7.48868, y: 2.777812}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &-8983296575597554706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7354643610872620916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cbc9c548db8374281a1772efc3fcbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sr: {fileID: 7354643610872620923}
+  bodyi: {fileID: 7354643610872620916}
+  rb: {fileID: 7354643610872620917}
+  find: 0
+  devidesize: 600
+  kadd: 0.8
+  kv: 10
+  size: 0
+  lifetime: 0
+  deadtime: 0
+  genV: 0
+  mutagen: 500
 --- !u!212 &7354643610872620923
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -57,6 +81,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -108,7 +133,7 @@ Rigidbody2D:
   m_LinearDrag: 0.6
   m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 16b42289fbe35ad4b805be2f62fd4d84, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -173,30 +198,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7354643610872620916}
   m_CullTransparentMesh: 0
---- !u!114 &-8983296575597554706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7354643610872620916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43cbc9c548db8374281a1772efc3fcbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sr: {fileID: 7354643610872620923}
-  bodyi: {fileID: 7354643610872620916}
-  rb: {fileID: 7354643610872620917}
-  find: 0
-  devidesize: 500
-  kadd: 0.8
-  kv: 10
-  size: 0
-  lifetime: 0
-  deadtime: 0
-  genV: 0
-  mutagen: 500
 --- !u!58 &6348728017017233319
 CircleCollider2D:
   m_ObjectHideFlags: 0

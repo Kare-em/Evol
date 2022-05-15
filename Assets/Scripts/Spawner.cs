@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
+
 public class Spawner : MonoBehaviour
 {
+    public PopulationControl PopulationControl;
     //pred
     public float startspeedpred;
     public float defpredsize;
-
 
 
     //body
@@ -20,34 +23,38 @@ public class Spawner : MonoBehaviour
     public GameObject predi;
     float DF = 10f;
 
-    
+
     public GameObject bodyi;
     public float R = 750.0f;
-    
+
     public float timespawnfood = 5.0f;
-    int countspawnfood = 40;
-    
+    public int countspawnfood = 40;
+    public int maxCountFood = 500;
+
     IEnumerator SpawnFood()
     {
         while (true)
         {
-            for (int i = 0; i < countspawnfood; i++)
+            if (maxCountFood > PopulationControl.food.Count)
             {
-                GameObject obj = Instantiate(foodi, new Vector3(Random.Range(-R, R), Random.Range(-R, R), 0), Quaternion.identity);
-                
-                obj.transform.localScale = new Vector3(DF,DF,1);
+                for (int i = 0; i < countspawnfood; i++)
+                {
+                    GameObject obj = Instantiate(foodi, new Vector3(Random.Range(-R, R), Random.Range(-R, R), 0),
+                        Quaternion.identity);
+
+                    obj.transform.localScale = Vector3.one*DF;
+                }
             }
-            
+
             yield return new WaitForSeconds(timespawnfood);
         }
-
-
     }
+
     public float D(float Size)
     {
-        return 2*(float)System.Math.Sqrt(Size / System.Math.PI);
+        return 2 * (float) System.Math.Sqrt(Size / System.Math.PI);
     }
-
+    
     public GameObject SpawnBody()
     {
         GameObject obj = Instantiate(bodyi);
@@ -61,6 +68,7 @@ public class Spawner : MonoBehaviour
 
         return obj;
     }
+
     public GameObject SpawnPred()
     {
         GameObject obj = Instantiate(predi);
@@ -74,18 +82,17 @@ public class Spawner : MonoBehaviour
 
         return obj;
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         StartCoroutine(SpawnFood());
         SpawnBody();
         SpawnPred();
     }
-    
-    
-    // Update is called once per frame
-    void Update()
-    {
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+            SpawnPred();
     }
 }

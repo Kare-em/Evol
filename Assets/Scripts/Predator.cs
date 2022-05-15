@@ -13,8 +13,8 @@ public class Predator : MonoBehaviour
     public ArrayList body = new ArrayList();
     public float devidesize = 1000.0f;
     GameObject rbf = null;
-    public float kadd;//коэф поглощения
-    public float kv;//коэф скорости
+    public float kadd; //коэф поглощения
+    public float kv; //коэф скорости
     public float size;
 
     public float lifetime;
@@ -27,15 +27,15 @@ public class Predator : MonoBehaviour
 
     void Start()
     {
-
     }
+
     private void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.tag == "Body")
         {
             if (coll is BoxCollider2D)
             {
-                size += kadd*coll.gameObject.GetComponent<Body>().size;
+                size += kadd * coll.gameObject.GetComponent<Body>().size;
                 float bufD = D(size);
                 transform.localScale = new Vector3(bufD, bufD, 1);
                 Debug.Log("eat");
@@ -43,6 +43,7 @@ public class Predator : MonoBehaviour
             }
         }
     }
+
     private void OnTriggerExit2D(Collider2D coll)
     {
         if (coll.tag == "Body")
@@ -54,6 +55,7 @@ public class Predator : MonoBehaviour
             }
         }
     }
+
     public void SpawnCopy()
     {
         Debug.Log("Spawncopy");
@@ -67,14 +69,15 @@ public class Predator : MonoBehaviour
         obj.GetComponent<Predator>().lifetime = 0;
         obj.transform.position = gameObject.transform.position;
         obj.GetComponent<Predator>().deadtime = 100000 / genV;
-        obj.GetComponent<SpriteRenderer>().color = new Color(0.5f, obj.GetComponent<Predator>().genV * 0.0003f, obj.GetComponent<Predator>().genV * 0.0003f, 1.0f);
+        obj.GetComponent<SpriteRenderer>().color = new Color(0.5f, obj.GetComponent<Predator>().genV * 0.0003f,
+            obj.GetComponent<Predator>().genV * 0.0003f, 1.0f);
         if (obj.GetComponent<Predator>().genV <= 0)
             Destroy(obj);
-
     }
+
     public float D(float Size)
     {
-        return 2 * (float)System.Math.Sqrt(Size / System.Math.PI);
+        return 2 * (float) System.Math.Sqrt(Size / System.Math.PI);
     }
 
     public GameObject FindClosestEnemy(Rigidbody2D rb)
@@ -95,6 +98,7 @@ public class Predator : MonoBehaviour
                 }
             }
         }
+
         return closest;
     }
 
@@ -106,35 +110,27 @@ public class Predator : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        else
-        {
-            if (size > devidesize)
-                SpawnCopy();
-            if (rbf == null)
-
-            {
-                body.Clear();
-                body.AddRange(GameObject.FindGameObjectsWithTag("Body"));
-                rbf = FindClosestEnemy(rb);
-
-
-            }
-            else
-            if(!find)
-            {
-
-                //rb.mass = size;
-
-
-
-
-
-                rb.AddForce((rbf.transform.position - rb.transform.position).normalized * genV * kv);
-
-            }
-
-        }
 
         lifetime += Time.deltaTime;
+    }
+
+    void FixedUpdate()
+    {
+        if (size > devidesize)
+            SpawnCopy();
+        if (rbf == null)
+
+        {
+            body.Clear();
+            body.AddRange(GameObject.FindGameObjectsWithTag("Body"));
+            rbf = FindClosestEnemy(rb);
+        }
+        else if (!find)
+        {
+            //rb.mass = size;
+
+
+            rb.AddForce((rbf.transform.position - rb.transform.position).normalized * genV * kv);
+        }
     }
 }
